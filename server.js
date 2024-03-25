@@ -1,4 +1,6 @@
 const app = require('./app');
+const connect = require('./src/models/mongoConnect');
+connect();
 const server = app.listen(
   { port: process.env.PORT || 60001, host: '0.0.0.0' },
   () => {

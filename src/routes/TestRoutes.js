@@ -33,6 +33,6 @@ const TestController = require('../controller/testController');
  *        $ref: '#/components/responses/NotFound'
  */
 router.get('/', TestController.getTest);
-
+router.post('/', TestController.saveTest);
 
 module.exports = router;
