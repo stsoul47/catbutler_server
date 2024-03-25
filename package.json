@@ -1,18 +1,14 @@
 {
-  "name": "jellymong-back",
+  "name": "catbutler_server",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/3alabsDev/jellymong-back.git"
+    "url": "https://github.com/stsoul47/catbutler_server.git"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/3alabsDev/jellymong-back/issues"
-  },
-  "homepage": "https://github.com/3alabsDev/jellymong-back#readme",
   "scripts": {
     "start": "cross-env NODE_ENV=production nodemon ./server.js",
     "prettify": "prettier --write *.js **/*.js ./src/**/*.js ./src/**/**/*.js",
