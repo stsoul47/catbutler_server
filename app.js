@@ -28,8 +28,8 @@ const app = express();
 const requestErrorHandler = require('./src/middlewares/errorHandler');
 const appStatic = require('./app.static');
 
-// const passportConfig = require('./src/passport');
-// passportConfig();
+const passportConfig = require('./src/passport');
+passportConfig();
 
 app.enable('trust proxy');
 app.set('trust proxy', () => true);
