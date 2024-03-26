@@ -1,3 +1,4 @@
 module.exports = {
-	...require('./testModels')
+	...require('./testModels'),
+	...require('./user/userModels')
 }
