@@ -20,7 +20,7 @@ module.exports = () => {
 		async (email, password, done) => {
 			try {
 				// 가입된 사용자인지 조회
-				const exUser = await userModel.findOne({ where: { email: email }}); // DB에서 email로 사용자 조회
+				const exUser = await userModel.findOne({  email: email }); // DB에서 email로 사용자 조회
 				if(exUser) {
 					const result = await crypto.verifyPassword(password, exUser.salt);
 					if(result === exUser.password) {

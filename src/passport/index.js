@@ -2,6 +2,7 @@ const passport = require('passport');
 // const local = 
 // const kakao =
 const userModel = require('../models/user/userModels');
+const local = require('./local');
 
 module.exports = () => {
 	/**
@@ -43,6 +44,6 @@ module.exports = () => {
 	 *  - user.id값 하나만 받아서, 이를 deserialize 복구해서 사용하는 식으로 하기위해서 
 	 */
 
-	// local();
+	local();
 	// kakao();
 }
