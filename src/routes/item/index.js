@@ -4,6 +4,9 @@ const authMiddlewares = require('../../middlewares/authMiddlewares');
 const multerMiddlewares = require('../../middlewares/multer');
 const imageManager = require('../../middlewares/imageManager');
 
+const { check } = require('express-validator');
+const validator = require('../../middlewares/validator');
+
 /**
  * @swagger
  * /item:
@@ -42,6 +45,11 @@ const imageManager = require('../../middlewares/imageManager');
 router.post(
   '/', 
   authMiddlewares.authenticated, 
+  validator.validator([
+    check([
+      'category','productName','price','option','mainImage','detailImage'
+    ]).exists(),
+  ]),
   imageManager.moveImage('/cdn/item_main_image/temp/','/cdn/item_main_image/image/','mainImage','mainFileUrl'),
   imageManager.moveImage('/cdn/item_detail_image/temp/','/cdn/item_detail_image/image/','detailImage','detailFileUrl'),
   itemController.insertItem
@@ -84,6 +92,9 @@ router.post(
 router.post(
   '/main-image/temp', 
   authMiddlewares.authenticated,
+  validator.validator([
+    check('filename').exists(),
+  ]),
   multerMiddlewares.singleTemp('cdn/item_main_image/temp','filename'), 
   itemController.uploadMainImageTemp
 );
@@ -124,8 +135,49 @@ router.post(
 router.post(
   '/detail-image/temp', 
   authMiddlewares.authenticated,
+  validator.validator([
+    check('filename').exists(),
+  ]),
   multerMiddlewares.ArrayTemp('cdn/item_detail_image/temp','filename'), 
   itemController.uploadDetailImageTemp
+);
+
+
+/**
+ * @swagger
+ * /item:
+ *  get:
+ *    tags: 
+ *      - item
+ *    summary: '상품 리스트 조회'
+ *    description: 상품 리스트 조회(삭제된 상품은 제외)
+ *    parameters: 
+ *      - $ref: '#/components/parameters/viewCount'
+ *      - $ref: '#/components/parameters/pageNumber'
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Response'
+ *            examples:
+ *              getItemListAllSuccessExample:
+ *                $ref: '#/components/examples/getItemListAllSuccessExample'
+ *      400:
+ *        $ref: '#/components/responses/BadRequest'
+ *      500:
+ *        $ref: '#/components/responses/InternalServer'
+ *      404:
+ *        description: Not Found
+ *        $ref: '#/components/responses/NotFound'
+ */
+router.get(
+  '/',
+  validator.validator([
+    check(['pageNumber','viewCount']).exists(),
+  ]),
+  itemController.getItemList
 );
 
 module.exports = router;

@@ -2,6 +2,24 @@ const {makeResponse} = require('../../utils/responseUtils');
 const controllerCode = require('../../utils/statusCode/controllerCodes').controllerCode;
 const itemService = require('../../services/item/itemServices');
 module.exports = {
+  getItemList: async(req, res, next) => {
+    try {
+      const serviceResult = await itemService.getItemList(req.query);
+
+      if(serviceResult.code) {
+        const data = {
+          count: serviceResult.totalCount,
+          list: serviceResult.data,
+          page: req.query.pageNumber,
+        }
+        res.status(200).json(await makeResponse(controllerCode.SUCCESS, '상품 리스트 조회 성공', data))
+      } else throw new Error();
+    } catch (error) {
+      error.status = 500;
+      error.msg = '상품 리스트 조회 실패';
+      next(error);
+    }
+  },
   uploadMainImageTemp: async(req, res, next) => {
     try {
       const data = {

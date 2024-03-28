@@ -125,4 +125,44 @@
  *            - cdn\\item_detail_image\\temp\\4a6eaa81726f4d7597ae729519d1e80b.jpg
  *            - cdn\\item_detail_image\\temp\\ae7504c2a3f7455d90c82e417c75a6ee.jpg
  * 
+ *    getItemListAllSuccessExample:
+ *      value: 
+ *        result: 
+ *           code: 1
+ *           message: 상품 리스트 조회 성공
+ *           data:
+ *             list: 
+ *              - requiredInfo: 
+ *                  modelName: null
+ *                  power: null 
+ *                  manufacturer: null
+ *                  size: null  
+ *                  specification: null
+ *                  asInfo: null 
+ *                  kcInfo: null
+ *                  releaseDate: null  
+ *                  country: null 
+ *                  weight: null
+ *                  quality: null  
+ *                _id: 66057c179320994fabaa9de5
+ *                category: 테스트 카테고리
+ *                productName: 테스트 아이템1
+ *                price: 1000000
+ *                deliveryFee: 3000
+ *                option: 
+ *                  - 테스트 옵션1
+ *                  - 테스트 옵션2
+ *                mainImage: 
+ *                  - 1230deacbffc4fba85c462c996d9740d.jpg
+ *                detailImage: 
+ *                  - 2f68fdc1ba054bbd87cc44ba4d03ad59.png
+ *                  - 4a6eaa81726f4d7597ae729519d1e80b.jpg
+ *                  - ae7504c2a3f7455d90c82e417c75a6ee.jpg
+ *                deleteTime: null
+ *                isVisible: 1
+ *                createdAt: 2024-03-28T14:17:59.101Z
+ *                updatedAt: 2024-03-28T14:17:59.101Z
+ *             count: 1
+ *             page: 1
+ * 
  */

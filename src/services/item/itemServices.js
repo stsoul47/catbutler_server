@@ -2,6 +2,18 @@ const dbCodes = require('../../utils/statusCode/databaseCodes').database;
 const itemModel = require('../../models/item/itemModels');
 
 module.exports = {
+  getItemList: async (reqData) => {
+    try {
+      const pageNumber = (reqData.pageNumber - 1) * reqData.viewCount;
+
+      const count = await itemModel.countDocuments({isVisible: 1});
+      const result = await itemModel.find({isVisible: 1}).skip(pageNumber).limit(reqData.viewCount).sort({ createdAt: -1}); 
+      
+      if(result) return {code: dbCodes.QUERY_SUCCESS, totalCount: count, data: result};
+    } catch (error) {
+      return {code: dbCodes.QUERY_FAIL}
+    }
+  },
   insertItem: async (reqData) => {
     try {
       const newItem = new itemModel({
