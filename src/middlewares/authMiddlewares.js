@@ -17,7 +17,7 @@ const UUID = require('../utils/uuid');
  * @throws {Error} - 인증 실패 시 401 Unauthorized 에러 발생
  */
 module.exports = {
-  authenticated: (req, res, next) => {
+  authenticated: async(req, res, next) => {
     try {
       const token = req.headers.authorization.split('Bearer ')[1];
       const checkJwt = await authVerify(token);

@@ -92,9 +92,6 @@ router.post(
 router.post(
   '/main-image/temp', 
   authMiddlewares.authenticated,
-  validator.validator([
-    check('filename').exists(),
-  ]),
   multerMiddlewares.singleTemp('cdn/item_main_image/temp','filename'), 
   itemController.uploadMainImageTemp
 );
@@ -135,9 +132,6 @@ router.post(
 router.post(
   '/detail-image/temp', 
   authMiddlewares.authenticated,
-  validator.validator([
-    check('filename').exists(),
-  ]),
   multerMiddlewares.ArrayTemp('cdn/item_detail_image/temp','filename'), 
   itemController.uploadDetailImageTemp
 );
