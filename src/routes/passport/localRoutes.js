@@ -61,7 +61,7 @@ router.post('/', (req, res, next)=> {
 		if(!user) {
 			return res.status(401).send({code: 401, message:"권한이 없습니다."});
 		}
-		const accessToken = getAccessToken(user.id);
+		const accessToken = await getAccessToken(user.id);
 		res.header('AccessToken', 'Bearer ' + accessToken);
 
 		const data = {
@@ -75,11 +75,11 @@ router.post('/', (req, res, next)=> {
 	})(req, res, next);
 });
 
-const getAccessToken = ( uuid ) => {
-	const jwtId = UUID.makeUUID();
-	const accessToken = jwt.sign(uuid, jwtId);
-	const refreshToken = jwt.refresh(jwtId);
-	setRedisData(uuid, refreshToken, REFRESH_TOKEN_EXPIRE);
+const getAccessToken = async ( uuid ) => {
+	const jwtId = await UUID.makeUUID();
+	const accessToken = await jwt.sign(uuid, jwtId);
+	const refreshToken = await jwt.refresh(jwtId);
+	await setRedisData(uuid, refreshToken, REFRESH_TOKEN_EXPIRE);
 
 	return accessToken;
 }

@@ -4,8 +4,9 @@
  */
 
 const jwt = require('../utils/jwt');
-const { CHECK_SUCCESS, CHECK_EXPIRED, REFRESH_ACCESS_TOKEN_ERROR, REFRESH_SUCCESS, REFRESH_EXPIRED } = require('../utils/jwtConfig');
-
+const { CHECK_SUCCESS, CHECK_EXPIRED, REFRESH_ACCESS_TOKEN_ERROR, REFRESH_SUCCESS, REFRESH_EXPIRED, REFRESH_TOKEN_EXPIRE } = require('../utils/jwtConfig');
+const { getRedisData, setRedisData } = require('../utils/redis.utils');
+const UUID = require('../utils/uuid');
 /**
  * 사용자가 인증되었는지 확인하는 미들웨어 함수
  * @function authenticated
@@ -19,16 +20,16 @@ module.exports = {
   authenticated: (req, res, next) => {
     try {
       const token = req.headers.authorization.split('Bearer ')[1];
-      const checkJwt = authVerify(token);
+      const checkJwt = await authVerify(token);
 
       if(checkJwt.status === CHECK_SUCCESS) {
         next();
       } else if(checkJwt.status === CHECK_EXPIRED) {
         // 토큰이 만료되었을 때
-        const newToken = resissuance(token);
+        const newToken = await reissuance(token);
         if(newToken.status === REFRESH_SUCCESS) {
           console.log("new access token:", newToken.accessToken);
-          res.headers('AccessToken', 'Bearer ' + newToken.accessToken);
+          res.header('AccessToken', 'Bearer ' + newToken.accessToken);
           next();
         } else if(newToken.status === REFRESH_EXPIRED) {
           const error = new Error();
@@ -61,9 +62,9 @@ module.exports = {
  * @param {string} token - JWT 토큰
  * @returns {Object} - JWT 검증 결과
  */
-const authVerify = (token) => {
+const authVerify = async (token) => {
   try {
-    const checkJwt = jwt.verify(token);
+    const checkJwt = await jwt.verify(token);
     return checkJwt;
   } catch (error) {
     console.trace(error)
@@ -77,11 +78,10 @@ const authVerify = (token) => {
  * @returns {Object} - 토큰 재발급 결과
  */
 const reissuance = async (token) => {
-	const accessPayload = decodeData(token);
-	try {
-		const refresh = await RedisUtil.getRedisData(accessPayload.uuid);
-		const refreshPayload = decodeData(refresh);
-
+  try {
+    const accessPayload = await decodeData(token);
+		const refresh = await getRedisData(accessPayload.uuid);
+		const refreshPayload = await decodeData(refresh);
 		if (!refresh || refresh === undefined) { // refresh 만료
 			return { status: REFRESH_EXPIRED, accessToken: null }
 		} else if( accessPayload.jwtId === refreshPayload.jwtId) { // 정상 상태, access_token, refresh token 재발급
@@ -94,4 +94,19 @@ const reissuance = async (token) => {
 	} catch (error) {
 		console.error(error);
 	}
+}
+
+
+const decodeData = async(token) => {
+	const encodedData = token.split('.')[1];
+	return await jwt.decoding(encodedData);
+}
+
+const getAccessToken = async( uuid ) => {
+	const jwtId = await UUID.makeUUID();
+	const accessToken = await jwt.sign(uuid, jwtId);
+	const refreshToken = await jwt.refresh(jwtId);
+	await setRedisData(uuid, refreshToken, REFRESH_TOKEN_EXPIRE);
+
+	return accessToken;
 }
