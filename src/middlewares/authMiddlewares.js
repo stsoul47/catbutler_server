@@ -16,7 +16,7 @@ const { CHECK_SUCCESS, CHECK_EXPIRED, REFRESH_ACCESS_TOKEN_ERROR, REFRESH_SUCCES
  * @throws {Error} - 인증 실패 시 401 Unauthorized 에러 발생
  */
 module.exports = {
-  authenticated: async(req, res, next) => {
+  authenticated: (req, res, next) => {
     try {
       const token = req.headers.authorization.split('Bearer ')[1];
       const checkJwt = authVerify(token);
