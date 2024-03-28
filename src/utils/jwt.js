@@ -5,17 +5,17 @@ const SECRET = process.env.JWT_SECRET_KEY || config.jwtSecret;
 const ALGORITHM = process.env.JWT_ALGORITHM || config.jwtAlgorithm;
 
 module.exports = {
-	sign: ( uuid, jwtId ) => { // access token 발급
+	sign: async( uuid, jwtId ) => { // access token 발급
 		const payload = { uuid, jwtId }; // payload 생성
-		return jwtUtil.sign(payload, SECRET, {
+		return await jwtUtil.sign(payload, SECRET, {
 			expiresIn: ACCESS_TOKEN_EXPIRE,
 			algorithm: ALGORITHM,
 		});
 	},
-	verify: ( token ) => { //access token 검증
+	verify: async( token ) => { //access token 검증
 		try {
 			const decoded = jwtUtil.verify(token, SECRET);
-			return { status: CHECK_SUCCESS, uuid: decoded.uuid }
+			return await { status: CHECK_SUCCESS, uuid: decoded.uuid }
 		}catch(error) {
 			// console.log("[jwt Util] error message", error.message );
 			if(error.message === "jwt expired") {
@@ -24,8 +24,8 @@ module.exports = {
 			else return { status: CHECK_FAILED, message: error.message }
 		}
 	},
-	refresh: ( jwtId ) => { //refresh token 발급
-		return jwtUtil.sign({ jwtId }, SECRET, { // refresh token은 payload 필요 없음
+	refresh: async( jwtId ) => { //refresh token 발급
+		return await jwtUtil.sign({ jwtId }, SECRET, { // refresh token은 payload 필요 없음
 			algorithm: ALGORITHM,
 			expiresIn: REFRESH_TOKEN_EXPIRE
 		});
