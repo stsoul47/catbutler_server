@@ -174,4 +174,37 @@ router.get(
   itemController.getItemList
 );
 
+
+/**
+ * @swagger
+ * /item/:id:
+ *  get:
+ *    tags: 
+ *      - item
+ *    summary: '상품 상세 조회'
+ *    description: 상품 상세 조회(삭제된 상품은 제외)
+ *    parameters: 
+ *      - $ref: '#/components/parameters/getItemDetailId'
+ *    responses:
+ *      200:
+ *        description: OK
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Response'
+ *            examples:
+ *              getItemDetailInfoSuccessExample:
+ *                $ref: '#/components/examples/getItemDetailInfoSuccessExample'
+ *      400:
+ *        $ref: '#/components/responses/BadRequest'
+ *      500:
+ *        $ref: '#/components/responses/InternalServer'
+ *      404:
+ *        description: Not Found
+ *        $ref: '#/components/responses/NotFound'
+ */
+router.get('/:id', validator.validator([
+  check('id').isMongoId()
+]), itemController.getItemDetail);
+
 module.exports = router;
