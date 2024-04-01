@@ -8,15 +8,27 @@ module.exports = {
 
       if(serviceResult.code) {
         const data = {
-          count: serviceResult.totalCount,
+          count: Number(serviceResult.totalCount),
           list: serviceResult.data,
-          page: req.query.pageNumber,
+          page: Number(req.query.pageNumber),
         }
         res.status(200).json(await makeResponse(controllerCode.SUCCESS, '상품 리스트 조회 성공', data))
       } else throw new Error();
     } catch (error) {
       error.status = 500;
       error.msg = '상품 리스트 조회 실패';
+      next(error);
+    }
+  },
+  getItemDetail: async(req, res, next) => {
+    try {
+      const serviceResult = await itemService.getItemDetail(req.params.id);
+      if(serviceResult.code) {
+        res.status(200).json(await makeResponse(controllerCode.SUCCESS, '상품 상세 조회 성공', serviceResult.data))
+      }
+    } catch (error) {
+      error.status = 500;
+      error.msg = '상품 상세 조회 실패';
       next(error);
     }
   },
