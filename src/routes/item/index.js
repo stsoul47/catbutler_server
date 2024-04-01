@@ -177,7 +177,7 @@ router.get(
 
 /**
  * @swagger
- * /item/:id:
+ * /item/{id}:
  *  get:
  *    tags: 
  *      - item
