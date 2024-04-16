@@ -1,10 +1,10 @@
 const {makeResponse} = require('../../utils/responseUtils');
 const controllerCode = require('../../utils/statusCode/controllerCodes').controllerCode;
-const itemService = require('../../services/item/itemServices');
+const itemServices = require('../../services/item/itemServices');
 module.exports = {
   getItemList: async(req, res, next) => {
     try {
-      const serviceResult = await itemService.getItemList(req.query);
+      const serviceResult = await itemServices.getItemList(req.query);
 
       if(serviceResult.code) {
         const data = {
@@ -22,7 +22,7 @@ module.exports = {
   },
   getItemDetail: async(req, res, next) => {
     try {
-      const serviceResult = await itemService.getItemDetail(req.params.id);
+      const serviceResult = await itemServices.getItemDetail(req.params.id);
       if(serviceResult.code) {
         res.status(200).json(await makeResponse(controllerCode.SUCCESS, '상품 상세 조회 성공', serviceResult.data))
       }
@@ -68,7 +68,7 @@ module.exports = {
   },
   insertItem: async(req, res, next) => {
     try {
-      const serviceResult = await itemService.insertItem(req.body);
+      const serviceResult = await itemServices.insertItem(req.body);
       if(serviceResult.code) {
         res.status(201).json(await makeResponse(controllerCode.SUCCESS, '상품 등록 성공'))
       } else throw new Error();
