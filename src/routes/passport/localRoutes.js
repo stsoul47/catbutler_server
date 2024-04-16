@@ -70,6 +70,8 @@ router.post('/', (req, res, next)=> {
 		}
 		delete data.password;
 		delete data.salt;
+		delete data.consent
+		delete data.__v
 
 		return res.status(201).json(await makeResponse(controllerCode.SUCCESS, '로그인 성공', data));
 	})(req, res, next);
