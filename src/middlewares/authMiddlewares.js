@@ -33,18 +33,18 @@ module.exports = {
           next();
         } else if(newToken.status === REFRESH_EXPIRED) {
           const error = new Error();
-          error.status(401);
+          error.status = 401;
           error.msg = 'Unauthorized';
           next(error);
         } else if(newToken.status === REFRESH_ACCESS_TOKEN_ERROR) {
           const error = new Error();
-          error.status(401);
+          error.status = 401;
           error.msg = 'Unauthorized';
           next(error);
         }
       } else {
         const error = new Error();
-        error.status(401);
+        error.status = 401;
         error.msg = 'Unauthorized';
         next(error);
       }
