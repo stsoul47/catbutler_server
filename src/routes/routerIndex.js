@@ -12,6 +12,6 @@ router.use('/test', index.test);
 router.use('/user', index.user);
 router.use('/auth', index.auth);
 router.use('/item', index.item);
-router.use('/', index.review);
+router.use('/review', index.review);
 
 module.exports = router;

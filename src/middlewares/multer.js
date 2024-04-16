@@ -81,10 +81,10 @@ module.exports = {
    * @param {String} imageParam - 파라미터 키값
    * @returns 
    */
-  ArrayTemp: function(tempPath, imageParam) {
+  ArrayTemp: function(tempPath, imageParam, maxCount = 10) {
     try {
       checkPath(tempPath);
-      return upload(tempPath).array(imageParam);
+      return upload(tempPath).array(imageParam, maxCount);
     } catch (error) {
       console.trace(error);
       return error;
