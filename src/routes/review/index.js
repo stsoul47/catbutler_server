@@ -129,6 +129,9 @@ router.post(
  *        description: Not Found
  *        $ref: '#/components/responses/NotFound'
  */
-router.get('/', reviewController.getReviewList);
+router.get('/', validator.validator([
+  check(['viewCount', 'pageNumber', 'itemId']).exists(),
+  check(['viewCount', 'pageNumber', 'rating']).isInt()
+]), reviewController.getReviewList);
 
 module.exports = router;
