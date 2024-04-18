@@ -17,5 +17,9 @@ app.use(
   express.static(path.join(__dirname, 'cdn/item_detail_image/temp'))
 );
 
+app.use(
+  '/cdn/review_image/image',
+  express.static(path.join(__dirname, 'cdn/review_image/image'))
+);
 
 module.exports = app;
