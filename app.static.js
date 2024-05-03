@@ -22,4 +22,11 @@ app.use(
   express.static(path.join(__dirname, 'cdn/review_image/image'))
 );
 
+app.use(
+  '/cdn/review_image/temp',
+  express.static(path.join(__dirname, 'cdn/review_image/temp'))
+);
+
+
+
 module.exports = app;
