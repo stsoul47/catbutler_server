@@ -44,7 +44,7 @@
  *    insertNewCartExample:
  *      value:
  *        userId: 66041fcabcaf7ef6f7eaf5a1
- *        carts: 
+ *        cartList: 
  *          - item: 66212b794cae23fbdf129e21
  *            quantity: 1
  *            selectOption: 피부/관절

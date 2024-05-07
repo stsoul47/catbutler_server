@@ -5,6 +5,7 @@
 
 const dbCodes = require('../../utils/statusCode/databaseCodes').database;
 const cartModel = require('../../models/cart/cartModels');
+const { startSession } = require('mongoose');
 
 module.exports = {
   /**
@@ -20,19 +21,42 @@ module.exports = {
    * @returns {number} code - 응답 코드
    */
   insertCart: async (reqData) => {
+    const session = await startSession();
     try {
-      const newCart = new cartModel({
-        user: reqData.userId,
-        carts: reqData.cartList.map((item) => ({
+      // 트랜잭션 시작
+      session.startTransaction();
+
+      // 유저의 카트를 찾음
+      let userCart = await cartModel.findOne({ user: reqData.userId }).session(session);
+
+      // 카트가 이미 존재하면 업데이트
+      if (userCart) {
+        userCart.carts = reqData.cartList.map((item) => ({
           item: item.item,
           quantity: item.quantity,
           selectOption: item.selectOption,
-        })),
-      });
-      const result = await newCart.save();
+        }));
+        await userCart.save({ session });
+      } else {
+        // 카트가 존재하지 않으면 새로운 카트 생성
+        userCart = new cartModel({
+          user: reqData.userId,
+          carts: reqData.cartList.map((item) => ({
+            item: item.item,
+            quantity: item.quantity,
+            selectOption: item.selectOption,
+          })),
+        });
+        await userCart.save({ session });
+      }
 
-      if (result) return { code: dbCodes.QUERY_SUCCESS };
+      await session.commitTransaction();
+      session.endSession();
+      return { code: dbCodes.QUERY_SUCCESS };
     } catch (error) {
+      // 에러 발생 시 세션 롤백
+      await session.abortTransaction();
+      session.endSession();
       return { code: dbCodes.QUERY_FAIL };
     }
   },
@@ -62,7 +86,7 @@ module.exports = {
         const formatData = cartListFormatting(result);
         return { code: dbCodes.QUERY_SUCCESS, data: formatData[0].carts };
       }
-      else return {code: dbCodes.QUERY_SUCCESS, data: []};
+      else return { code: dbCodes.QUERY_SUCCESS, data: [] };
     } catch (error) {
       return { code: dbCodes.QUERY_FAIL };
     }
