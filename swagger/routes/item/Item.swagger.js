@@ -76,6 +76,18 @@
  *      schema:
  *        type: string
  *      example: 66057c179320994fabaa9de5
+ *    getItemCategory:
+ *      name: category
+ *      in: query
+ *      description: |  
+ *        아이템의 카테고리  
+ *        전체 조회시 '0000'  
+ *        상위 카테고리 조회시 '00'로 끝나는 카테고리 코드  
+ *        하위 카테고리 조회시 해당 카테고리 코드  
+ *      require: false
+ *      schema:
+ *        type: string
+ *      example: '0000'
  * 
  *  examples:
  *    insertItemExample:

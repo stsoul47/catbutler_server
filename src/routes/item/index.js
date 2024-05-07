@@ -148,6 +148,7 @@ router.post(
  *    parameters: 
  *      - $ref: '#/components/parameters/viewCount'
  *      - $ref: '#/components/parameters/pageNumber'
+ *      - $ref: '#/components/parameters/getItemCategory'
  *    responses:
  *      200:
  *        description: OK
