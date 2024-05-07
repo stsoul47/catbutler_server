@@ -6,9 +6,21 @@ module.exports = {
     try {
       const pageNumber = (reqData.pageNumber - 1) * reqData.viewCount;
 
-      const count = await itemModel.countDocuments({isVisible: 1});
+      
+
+      let findQuery = {};
+      findQuery.isVisible = 1;
+      if(reqData.category === '0000') {
+      } else if(reqData.category !== '0000' && reqData.category.endsWith('00')) {
+        findQuery.category = {$regex: '^' + reqData.category.slice(0, 2)};
+      } else {
+        findQuery.category = reqData.category;
+      }
+
+      const count = await itemModel.countDocuments(findQuery);
+
       const result = await itemModel
-        .find({isVisible: 1}, {
+        .find(findQuery, {
           deliveryFee: 0,
           option: 0,
           requiredInfo: 0,
