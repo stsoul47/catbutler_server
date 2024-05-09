@@ -75,7 +75,7 @@ module.exports = {
       const result = await cartModel
         .find({ user: reqData.userId }, { __v: 0, _id: 0 })
         .populate('carts.item', {
-          _id: 0,
+          _id: 1,
           productName: 1,
           deliveryFee: 1,
           price: 1,
