@@ -9,7 +9,7 @@ const cartController = require('../../controller/cart/cartController');
 /**
  * @swagger
  * /cart:
- *  post:
+ *  put:
  *    tags: 
  *      - cart
  *    summary: Cart 등록
@@ -41,7 +41,7 @@ const cartController = require('../../controller/cart/cartController');
  *      500:
  *        $ref: '#/components/responses/InternalServer'
  */
-router.post(
+router.put(
   '/', 
   validator.validator([
     check(['userId', 'cartList']).exists()
